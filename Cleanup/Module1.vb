@@ -7,7 +7,7 @@ Module Module1
             Console.WriteLine("Cleanup.exe <Directory> <Search pattern> <Number of newest files to keep>")
             Console.WriteLine("Example:")
             Console.WriteLine("Cleanup.exe *.tmp ""c:\path to my data"" 5")
-            Console.WriteLine("(Deletes all but the 5 newest files in ""c:\path to my data"" and each subdirectory)")
+            Console.WriteLine(" - Deletes all but the 5 newest *.tmp files in each of ""c:\path to my data"" 's subdirectories")
             Exit Sub
         Else
             Dim sDir As String = My.Application.CommandLineArgs(0)
@@ -21,10 +21,10 @@ Module Module1
                 Exit Sub
             End Try
 
-            Console.WriteLine("Deleting files from " + sDir + " with pattern " + sPattern + " and keep the " + iNum.ToString + " newest.")
+            Console.WriteLine($"Deleting files from '{sDir}' with pattern {sPattern} and keep the {iNum.ToString} newest.")
             Dim iValues() = _cleanup(sDir, sPattern, iNum)
-            Console.WriteLine(iValues(0).ToString + " file(s) deleted.")
-            Console.WriteLine(iValues(1).ToString + " file(s) skipped.")
+            Console.WriteLine($"{iValues(0).ToString} file(s) deleted.")
+            Console.WriteLine($"{iValues(1).ToString} file(s) skipped.")
         End If
     End Sub
 
@@ -38,9 +38,9 @@ Module Module1
                 Try
                     f.Delete()
                     iDeletedCount += 1
-                    Console.WriteLine(s + "\" + f.Name + " deleted")
+                    Console.WriteLine($"{s}\{f.Name} deleted")
                 Catch ex As Exception
-                    Console.WriteLine("Failed deleting " + s + "\" + f.Name)
+                    Console.WriteLine($"Failed deleting {s}\{f.Name}")
                     iSkippedCount += 1
                 End Try
             Next
