@@ -1,5 +1,5 @@
 # wincleanupdir
-Deletes files from directory and subdir and keeps N newest files.
+Deletes files from all directories subdirs and keeps N newest files in each subdir.
 
 ## Syntax:
 `Cleanup.exe <Directory> <Search pattern> <Number of newest files to keep>`
