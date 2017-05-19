@@ -22,27 +22,30 @@ Module Module1
             End Try
 
             Console.WriteLine("Deleting files from " + sDir + " with pattern " + sPattern + " and keep the " + iNum.ToString + " newest.")
-            Dim iDeletedFiles = _cleanup(sDir, sPattern, iNum)
-            Console.WriteLine(iDeletedFiles.ToString + " deleted.")
+            Dim iValues() = _cleanup(sDir, sPattern, iNum)
+            Console.WriteLine(iValues(0).ToString + " file(s) deleted.")
+            Console.WriteLine(iValues(1).ToString + " file(s) skipped.")
         End If
     End Sub
 
-    Private Function _cleanup(sDirectory As String, sPattern As String, iNumber As Integer) As Integer
-        Dim iCount As Integer = 0
+    Private Function _cleanup(sDirectory As String, sPattern As String, iNumber As Integer) As Integer()
+        Dim iSkippedCount As Integer = 0
+        Dim iDeletedCount As Integer = 0
         Dim subdirs = Directory.EnumerateDirectories(sDirectory)
         For Each s In subdirs
             Dim files = New DirectoryInfo(s).EnumerateFiles(sPattern).OrderByDescending(Function(f) f.CreationTime).Skip(iNumber).ToList()
             For Each f In files
                 Try
                     f.Delete()
-                    iCount += 1
+                    iDeletedCount += 1
                     Console.WriteLine(s + "\" + f.Name + " deleted")
                 Catch ex As Exception
                     Console.WriteLine("Failed deleting " + s + "\" + f.Name)
+                    iSkippedCount += 1
                 End Try
             Next
         Next
-        Return iCount
+        Return {iDeletedCount, iSkippedCount}
     End Function
 
 End Module
